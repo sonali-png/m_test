@@ -32,7 +32,7 @@ class MaterialController extends Controller
             'name' => $request->input('name'),
             'category_id' => $request->input('category_id'),
             'opening_balance' => $request->input('opening_balance'),
-            'current_balance' => $request->input('opening_balance') + 20
+            'current_balance' => $request->input('opening_balance') + 20 //Hardcode Inward quantity
         );
         if(!empty($request->input('id'))) {
             Material::where('id', $request->id)->update( $inputData );  
