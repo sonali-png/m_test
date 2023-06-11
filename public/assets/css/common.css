@@ -1,3 +1,9 @@
+.space10px {
+  padding:10px;
+}
+.space20px {
+  padding: 20px;
+}
 .header {
     padding: 10px;
     background: #1abc9c;
@@ -10,6 +16,11 @@
 .container {
   position: sticky;
   top: 80px;
+}
+.disabled_field {
+  pointer-events: none;
+  opacity: 0.6;
+  font-weight: 900;
 }
 .add-btn {
   float: right;

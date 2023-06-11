@@ -1,10 +1,5 @@
 $(document).ready(function(){
     $(".deleteRecord").click(function(){
-        $.ajaxSetup({
-            headers: {
-               'X-CSRF-TOKEN': $('#csrf_token').val()
-            }
-        });
         var id = $(this).data("id");
         $.ajax(
         {
@@ -16,7 +11,7 @@ $(document).ready(function(){
             }
         });
     });
-    $("input[id='opening_balance']").keydown(function (event) {
+    $(".float_num").keyup(function (event) {
         if (event.shiftKey == true) {
             event.preventDefault();
         }
@@ -26,8 +21,41 @@ $(document).ready(function(){
             event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
 
         } else if($(this).val().indexOf('.') == -1  &&  (event.keyCode == 110 || event.keyCode == 190)) {
-        } else {
+        } else if((event.keyCode == 109 || event.keyCode == 189)) {
+        }else {
             event.preventDefault();
         }
+        if ( ($(".compareQuantity").val() == 1) && $('#inward_qty').val() != '') {
+            let maxQty = parseFloat($('#inward_qty').val());
+            let entered = parseFloat($(this).val());
+            if( (maxQty + entered) < 0 ){
+                alert('Quantity should not be greater than opening balance');
+                $('.float_num').val('');
+            }
+        }
     });
+
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 2000);
+
+    $("#material_id").change(function() {
+        var token = $('input[name="_token"]').val();
+        var id = $('#material_id').val();
+        $.ajax( {
+            type: "POST",
+            url: '/balance',
+            data: {'_token':token, 'id':id},
+            dataType:'JSON',
+            success: function(response) {
+                $('#inward_qty').val("");
+                $('#inward_qty').val(response);
+                $('#inward_qty_c').val("");
+                $('#inward_qty_c').val(response);
+            }
+        });
+    });
+
+    $( "#datepicker" ).datepicker( {dateFormat: 'yy-mm-dd'} );
+
 });

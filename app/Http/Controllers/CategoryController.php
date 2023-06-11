@@ -13,7 +13,7 @@ class CategoryController extends Controller
     
     public function index()
     {
-        $data = Category::paginate(5);
+        $data = Category::orderBy('id', 'DESC')->paginate(5);
         return view('category', compact('data'));
     }
 
@@ -23,7 +23,7 @@ class CategoryController extends Controller
     public function store(Request $request, Category $category)
     {
         $request->validate([
-            'name' => 'required|max:100',
+            'name' => 'required|unique:categories|max:100',
         ]);
         if(!empty($request->id)) {
             Category::where('id', $request->id)->update( ['name' => $request->input('name')] );  
@@ -40,7 +40,7 @@ class CategoryController extends Controller
     {
         $category_data = Category::find($category);
         $category_data = !empty($category_data) ? $category_data[0] : array();
-        $data = Category::paginate(5);
+        $data = Category::orderBy('id', 'DESC')->paginate(5);
         return view('category')->with(['category_data'=>$category_data, 'data'=> $data]);
     }
 

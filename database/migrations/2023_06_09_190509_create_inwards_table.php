@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materials', function (Blueprint $table) {
+        Schema::create('inwards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->nullable();
-            $table->string('name', 100)->nullable();
-            $table->float('opening_balance', 5, 2)->default(0);
+            $table->foreignId('material_id')->constrained()->nullable();
+            $table->date('transaction_at');
+            $table->float('inward_qty', 5, 2)->default(0);
+            $table->float('outward_qty', 5, 2)->default(0);
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('materials');
+        Schema::dropIfExists('inwards');
     }
 };

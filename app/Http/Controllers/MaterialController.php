@@ -13,7 +13,7 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        $data = Material::paginate(5);
+        $data = Material::orderBy('id', 'DESC')->with('categories')->paginate(5);
         $categories = Category::all();
         return view('material')->with(['data'=>$data, 'categories'=>$categories]);
     }
@@ -23,8 +23,13 @@ class MaterialController extends Controller
      */
     public function store(Request $request, Material $material)
     {
+
+        if(!$request->id) {
+            $request->validate([
+                'name' => 'required|unique:materials|max:100',
+            ]);
+        }
         $request->validate([
-            'name' => 'required|unique:materials|max:100',
             'category_id'=>'required',
             'opening_balance'=>'required'
         ]);
@@ -32,8 +37,8 @@ class MaterialController extends Controller
             'name' => $request->input('name'),
             'category_id' => $request->input('category_id'),
             'opening_balance' => $request->input('opening_balance'),
-            'current_balance' => $request->input('opening_balance') + 20 //Hardcode Inward quantity
         );
+        
         if(!empty($request->input('id'))) {
             Material::where('id', $request->id)->update( $inputData );  
         } else {
@@ -48,9 +53,9 @@ class MaterialController extends Controller
     public function edit(Material $material)
     {
         $categories = Category::all();
-        $material_data = Material::find($material);
-        $material_data = !empty($material_data) ? $material_data[0] : array();
-        $data = Material::paginate(5);
+        $material_data = Material::find($material->id);
+        $material_data = !empty($material_data) ? $material_data : array();
+        $data = Material::orderBy('id', 'DESC')->paginate(5);
         return view('material')->with(['material_data'=>$material_data, 'data'=>$data , 'categories'=>$categories]);
     }
 
