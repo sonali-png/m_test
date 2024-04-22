@@ -21,3 +21,7 @@ Route::get('/material/{id}/inwards', [InwardController::class, 'showList'])->nam
 Route::resource('material', MaterialController::class);
 Route::resource('inwards', InwardController::class);
 Route::post('/balance', [InwardController::class, 'getBalance']);
+
+Route::get('/tryme', function() {
+    echo "try me";
+});
