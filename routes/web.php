@@ -23,5 +23,5 @@ Route::resource('inwards', InwardController::class);
 Route::post('/balance', [InwardController::class, 'getBalance']);
 
 Route::get('/tryme', function() {
-    echo "try me";
+    echo "try me after change";
 });
